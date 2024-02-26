@@ -1,0 +1,317 @@
+:root {
+  /* dark mode */
+  --dark-font: #ffffff;
+  --dark-bg: #000000;
+
+  /* light mode */
+  --light-font: #000000;
+  --light-bg: #ffffff;
+
+  --socio-color: #ffc900;
+}
+
+.darkBG > * {
+  color: var(--dark-font);
+}
+
+.lightBG > * {
+  color: var(--light-font);
+}
+
+.postAuthor {
+  width: 30vw;
+  height: 3vw;
+  display: flex;
+  align-items: center;
+  gap: 3%;
+  margin: 1% 0;
+  border: solid 1px white;
+  margin-top: 0;
+}
+
+.postAuthorImgContainer {
+  width: 2.5vw;
+  height: 2.5vw;
+  background-color: #ffffff;
+  border-radius: 50%;
+}
+
+.postAuthorImgContainer > img {
+  height: 100%;
+}
+
+.creator-follow-button {
+  width: 5vw;
+  height: 1.5vw;
+  border-radius: 5px;
+  background-color: var(--socio-color);
+}
+
+.creator-follow-button p {
+  border-radius: 5px;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-content {
+  width: 30vw;
+}
+
+.main-content > img {
+  width: 30vw;
+  height: 30vw;
+}
+
+.video-wrapper {
+  border: solid 1px white;
+  position: relative;
+  width: 30vw;
+  height: 20vw;
+  padding-bottom: 56.25%; /* for 9:16 aspect ratio */
+  overflow: hidden;
+}
+
+.video-wrapper video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.descritption {
+  width: 30vw;
+  height: 8vw;
+  position: relative;
+  border: solid 1px white;
+}
+
+.caption {
+  width: 30vw;
+  height: 4vw;
+  margin: 0;
+  position: absolute;
+  bottom: 4vw;
+  background-color: #000000;
+  overflow-y: scroll;
+}
+
+.caption::-webkit-scrollbar {
+  display: none;
+}
+
+.content-stats {
+  width: 30vw;
+  height: 4vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 0;
+  position: absolute;
+  bottom: 0;
+}
+
+.like > svg,
+.dislike > svg,
+.comments > svg,
+.share > svg,
+.save > svg {
+  color: var(--socio-color);
+  font-size: 1.2vw;
+}
+
+.share > svg,
+.save > svg {
+  font-size: 1.7vw;
+}
+
+@media screen and (max-width: 600px) {
+  .post,.video{
+    width: 99vw;
+    min-height: 100% !important;
+    height: 100% !important;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .video{
+    max-width: 99vw;
+  }
+
+  .postAuthor {
+    width: 98%;
+    height: 10vw;
+  }
+
+  .postAuthorImgContainer {
+    width: 10vw;
+    height: 10vw;
+  }
+
+  .creator-follow-button {
+    width: 25vw;
+    height: 8vw;
+  }
+
+  .main-content{
+    width: 100%;
+    top: 10vw;
+  }
+
+  .video-wrapper{
+    width: 100%;
+    height: 100%;
+    border: solid 3px green;
+    margin-top: -10%;
+  }
+
+  .main-content > img {
+    width: 98vw;
+    height: 98vw;
+  }
+
+  .video-wrapper video{
+    width: 100%;
+    height: 100%;
+  }
+
+  .descritption {
+    width: 100%;
+    height: 100%;
+  }
+
+  .video .descritption{
+    height: 100%;
+  }
+
+  .descritption > * {
+    width: 100%;
+  }
+
+  .caption {
+    height: 50%;
+    bottom: 50%;
+  }
+
+  .content-stats {
+    bottom: 0;
+    height: 50%;
+  }
+
+  .like > svg,
+  .dislike > svg,
+  .comments > svg,
+  .share > svg,
+  .save > svg {
+    font-size: 5vw;
+  }
+
+  .share > svg,
+  .save > svg {
+    font-size: 5.5vw;
+  }
+}
+
+@media screen and (min-width:768px) and (max-width:885px){
+  .post,.video{
+    width: 99vw;
+    min-height: calc(100% + 30vw) !important;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .video{
+    max-width: 99vw;
+  }
+
+  .postAuthor{
+    width: 100%;
+    height: 11vw;
+  }
+
+  .postAuthorImgContainer {
+    width: 10vw;
+    height: 10vw;
+  }
+
+  .creator-follow-button{
+    width: 25vw;
+    height: 8vw;
+  }
+
+  .post-username{
+    font-size: 4vw;
+  }
+
+  .main-content{
+    width: 100vw;
+    top: 10vw;
+  }
+
+  .video-wrapper{
+    width: 100%;
+    height: 100%;
+    border: solid 3px green;
+    margin-top: -10%;
+  }
+
+  .main-content > img{
+    width: 100%;
+    height: 100%;
+  }
+
+  .video-wrapper video{
+    width: 99vw;
+    height: 99vw;
+  }
+
+  .descritption{
+    width: 100%;
+    height: 30vw;
+  }
+
+  .video .descritption{
+    height: 40%;
+  }
+
+  .descritption > *{
+    width: 100%;
+    height: 50%;
+  }
+
+  .caption{
+    bottom: 50%;
+    border: solid 2px green;
+  }
+
+  .content-stats{
+    bottom: 0;
+    border: solid 2px yellow;
+  }
+
+  .like > svg,
+  .dislike > svg,
+  .comments > svg,
+  .share > svg,
+  .save > svg {
+    font-size: 5vw;
+  }
+
+  .share > svg,
+  .save > svg {
+    font-size: 5.5vw;
+  }
+
+  .upload-time{
+    font-size: 4vw;
+  }
+}

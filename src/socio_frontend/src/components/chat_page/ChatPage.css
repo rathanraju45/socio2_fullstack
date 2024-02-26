@@ -1,0 +1,193 @@
+:root {
+     /* dark mode */
+     --dark-font: #ffffff;
+     --dark-bg: #000000;
+
+     /* light mode */
+     --light-font: #000000;
+     --light-bg: #ffffff;
+
+     --socio-color: #ffc900;
+}
+
+#home-navigation {
+     border-right: none;
+}
+
+#chat-page {
+     width: 100%;
+     height: 100%;
+     box-sizing: border-box;
+     display: flex;
+}
+
+.chats {
+     border-right: solid 1px;
+     width: 25%;
+     height: 100%;
+     box-sizing: border-box;
+}
+
+#chat-heading {
+     width: 100%;
+     height: 7%;
+     border-bottom: solid 1px;
+     display: flex;
+}
+
+#chat-heading p {
+     width: 50%;
+     height: 100%;
+     font-size: 2vw;
+     font-weight: bold;
+     margin: 0;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     cursor: pointer;
+}
+
+#chats-list {
+     width: 100%;
+     height: 93%;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     overflow-x: scroll;
+}
+
+#chat-list-search-container {
+     width: 100%;
+     min-height: 10%;
+     position: sticky;
+     top: 0;
+     z-index: 100;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+}
+
+#chat-list-search {
+     width: calc(100% - 16px);
+     height: 60%;
+     border-radius: 10px;
+     font-size: 1.2vw;
+}
+
+#chat-list-search::placeholder {
+     font-size: 1.2vw;
+     color: var(--socio-color);
+}
+
+#chat-list-search:focus {
+     border: solid 3.5px var(--socio-color) !important;
+}
+
+#chats-list::-webkit-scrollbar {
+     display: none;
+}
+
+.messages {
+     width: 75%;
+     height: 100%;
+     box-sizing: border-box;
+}
+
+@media screen and (max-width: 600px) {
+     .chatListHide {
+          display: none !important;
+     }
+
+     .chatListDisplay {
+          display: flex;
+          flex-direction: column;
+     }
+
+     .messagesHide {
+          display: none !important;
+     }
+
+     .messagesDisplay {
+          display: flex;
+     }
+
+     #chat-page {
+          flex-direction: column !important;
+          height: calc(100% - 15vw);
+          overflow-x: scroll;
+     }
+
+     .chats {
+          width: 100%;
+     }
+
+     #chat-heading p {
+          font-size: 5vw;
+     }
+
+     .messages {
+          width: 100%;
+          height: 100%;
+     }
+
+     #chat-list-search::placeholder {
+          font-size: 6vw;
+     }
+
+     #chat-list-search{
+        font-size: 5.5vw;
+     }
+}
+
+@media screen and (min-width: 768px) and (max-width: 885px) {
+     .chatListHide {
+          display: none !important;
+     }
+
+     .chatListDisplay {
+          display: flex;
+          flex-direction: column;
+     }
+
+     .messagesHide {
+          display: none !important;
+     }
+
+     .messagesDisplay {
+          display: flex;
+     }
+
+     #chat-page {
+          flex-direction: column !important;
+          height: calc(100% - 10vw);
+          overflow: scroll;
+     }
+
+     .chats {
+          width: 100%;
+     }
+
+     #chat-heading p {
+          font-size: 5vw;
+     }
+
+     .messages {
+          width: 100%;
+          height: calc(100% - 10px);
+          border: solid 1px red;
+     }
+
+     #chat-list-search-container{
+        min-height: 15%;
+     }
+
+     #chat-list-search::placeholder {
+          font-size: 6vw;
+     }
+
+     #chat-list-search{
+        font-size: 5vw;
+        height: 70%;
+     }
+     
+}

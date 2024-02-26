@@ -1,0 +1,106 @@
+.chat-item {
+     border: solid 1px;
+     width: calc(100% - 8px);
+     height: 15%;
+     min-height: 15%;
+     margin: 1% 0;
+     box-sizing: border-box;
+     position: relative;
+     display: flex;
+     align-items: center;
+     cursor: pointer;
+}
+
+.chat-profile-pic {
+     width: 20%;
+     height: 0;
+     padding-bottom: 20%;
+     border-radius: 50%;
+     margin-left: 2%;
+}
+
+.chat-profile-pic img {
+     width: 100%;
+     border-radius: 50%;
+}
+
+.chat-profile-details {
+     width: 76%;
+     height: 100%;
+     margin-left: 2%;
+}
+
+.chat-profile-details .chat-username {
+     height: calc(100% / 3);
+     font-size: 1.3vw;
+     margin: 0;
+     display: flex;
+     align-items: center;
+}
+
+.chat-profile-details .chat-item-preview {
+     height: calc(100% / 3);
+     font-size: 0.9vw;
+     margin: 0;
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+}
+
+.chat-status {
+     height: calc(100% / 3);
+     margin: 0;
+     font-size: 1.2vw;
+}
+
+@media screen and (max-width:600px) {
+
+    .chat-item{
+        min-height: 18%;
+        height: 18%;
+    }
+
+    .chat-profile-pic{
+        width: 15%;
+        padding-bottom: 15%;
+    }
+
+    .chat-profile-details .chat-username{
+        font-size: 5vw;
+    }    
+
+    .chat-profile-details .chat-item-preview{
+        font-size: 4.5vw !important;
+    }
+
+    .chat-status{
+        font-size: 4vw;
+    }
+    
+}
+
+@media screen and (min-width:768px) and (max-width:885px){
+
+    .chat-item{
+        height: 20%;
+        min-height: 20%;
+    }
+
+    .chat-profile-pic{
+        width: 15%;
+        padding-bottom: 15%;
+    }
+
+    .chat-profile-details .chat-username{
+        font-size: 4.5vw;
+    }    
+
+    .chat-profile-details .chat-item-preview{
+        font-size: 4vw !important;
+    }
+
+    .chat-status{
+        font-size: 3.5vw;
+    }
+    
+}
