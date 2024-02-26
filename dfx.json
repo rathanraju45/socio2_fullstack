@@ -1,0 +1,29 @@
+{
+  "canisters": {
+    "socio_backend": {
+      "main": "src/socio_backend/main.mo",
+      "type": "motoko"
+    },
+    "socio_frontend": {
+      "dependencies": [
+        "socio_backend"
+      ],
+      "frontend": {
+        "entrypoint": "src/socio_frontend/src/index.html"
+      },
+      "source": [
+        "src/socio_frontend/assets",
+        "dist/socio_frontend/"
+      ],
+      "type": "assets"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
