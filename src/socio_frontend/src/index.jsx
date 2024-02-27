@@ -13,6 +13,8 @@ const client = createClient({
   providers: defaultProviders,
 });
 
+const socio_backend_canister_id = process.env.CANISTER_ID_socio_backend;
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
