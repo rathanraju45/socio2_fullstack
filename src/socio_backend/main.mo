@@ -109,4 +109,15 @@ actor socio {
         };
     };
 
+    public func getProfile(identity : Text) : async ?User{
+        switch(users.get(Principal.fromText(identity))){
+            case (null){
+                return null;
+            };
+            case(user){
+                return user;
+            };
+        };
+    };
+
 };

@@ -110,22 +110,27 @@ export default function UserDetails({ setUserExists, setLoading }) {
         return 1;
     };
 
+    function validateBio(){
+        if(bio === ""){
+            setBio("Socio user");
+        }
+    }
+
     async function createNewUser() {
         const uNameresult = await validateUserName();
         const dNameresult = validateDisplayName();
-        if(bio === ""){
-            setBio("Socio user");
-        };
+        validateBio();
 
         if (uNameresult === 1 && dNameresult === 1) {
             if(binaryProfile === null){
                 console.log("please upload profile picture");
             } else {
+                setLoading(true);
                 const { status } = await canister.createNewUser(principal, username, displayName, binaryProfile, bio);
                 if(status === 0n){
-                    console.log("success");
                     setUserExists(true);
                 };
+                setLoading(false);
             };
         };
     };
