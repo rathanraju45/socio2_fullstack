@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import socio_logo from "../../../assets/images/socio_home_logo_black_bg.png";
 import defautl_profile_pic from "../../../assets/images/default_profile.jpg";
 import Resizer from 'react-image-file-resizer';
@@ -7,7 +7,7 @@ import CanisterContext from '../CanisterContext';
 
 export default function UserDetails({ setUserExists, setLoading }) {
 
-    const {canister} = useContext(CanisterContext);
+    const { canister, principal } = useContext(CanisterContext);
 
     const [usernameError, setUsernameError] = useState(null);
     const [displaynameError, setDisplaynameError] = useState(null);
@@ -20,41 +20,114 @@ export default function UserDetails({ setUserExists, setLoading }) {
 
     const [binaryProfile, setBinaryProfile] = useState(null);
 
-    const handleImageUpload = (event) => {
-        let file = event.target.files[0];
-        convertPicToBinary(file);
+    function handleImageUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                // Convert the ArrayBuffer to a Blob
+                const photoBlob = new Blob([e.target.result], { type: file.type });
 
-        Resizer.imageFileResizer(
-            file,
-            300,
-            300,
-            'JPEG',
-            100,
-            0,
-            async (uri) => {
-                setProfilePicture(uri);
-            },
-            'base64'
-        );
+                // Create a URL for the Blob
+                const imageUrl = URL.createObjectURL(photoBlob);
+
+                // Set the profile picture
+                setProfilePicture(imageUrl);
+
+                // Convert the ArrayBuffer to a Vec<Nat8>
+                const arrayBuffer = new Uint8Array(e.target.result);
+                const vecNat8 = Array.from(arrayBuffer);
+
+                // Set the binary profile
+                setBinaryProfile(vecNat8);
+            };
+            reader.readAsArrayBuffer(file);
+        }
     };
 
-    function convertPicToBinary(file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            var blob = new Blob([event.target.result], { type: file.type });
-            blob = new Uint8Array(blob);
-            setBinaryProfile(blob);
+    useEffect(() => {
+        if (usernameError !== null) {
+            setUsernameError(null);
         };
-        reader.readAsArrayBuffer(file);
+    }, [username]);
+
+    useEffect(() => {
+        if (displaynameError !== null) {
+            setDisplaynameError(null);
+        };
+    }, [displayName]);
+
+    useEffect(() => {
+        setBioCount(bio.length);
+    }, [bio]);
+
+    async function validateUserName() {
+        var validateUname = username;
+        if (validateUname !== '') {
+            if (validateUname.length < 5 || validateUname.length > 20) {
+                setUsernameError('*Character length must be betweeen 5 & 20');
+                return 0;
+            } else if (!/^[a-zA-Z_]/.test(validateUname)) {
+                setUsernameError('*First Character must be alphabet');
+                return 0;
+            } else if (!/^[a-zA-Z0-9_]*$/.test(validateUname)) {
+                setUsernameError('*only alphanumerics and _ is allowed');
+                return 0;
+            } else {
+                setUsernameError('Checking for Username availability');
+                const { status } = await canister.checkUsername(validateUname);
+                if (status !== 0n) {
+                    setUsernameError("Username already taken");
+                    return 0;
+                } else {
+                    setUsernameError(null);
+                    return 1;
+                };
+            };
+        } else {
+            setUsernameError('*Username is empty');
+            return 0;
+        };
+    };
+
+    function validateDisplayName() {
+        var validateDname = displayName;
+        if (validateDname !== '') {
+            if (validateDname.length < 5 || validateDname.length > 20) {
+                setDisplaynameError('*Character length must be betweeen 5 & 20');
+                return 0;
+            } else if (!/^[a-zA-Z_]/.test(validateDname)) {
+                setDisplaynameError('*First Character must be alphabet');
+                return 0;
+            } else if (!/^[a-zA-Z0-9_]*$/.test(validateDname)) {
+                setDisplaynameError('*only alphanumerics and _ is allowed');
+                return 0;
+            }
+        } else {
+            setDisplaynameError('*Display name is empty');
+            return 0;
+        };
+        return 1;
     };
 
     async function createNewUser() {
-        setLoading(true);
-        const { status, msg } = await canister.createNewUser(username, displayName, binaryProfile, bio);
-        if (status === 0n) {
-            setUserExists(true);
+        const uNameresult = await validateUserName();
+        const dNameresult = validateDisplayName();
+        if(bio === ""){
+            setBio("Socio user");
         };
-        setLoading(false);
+
+        if (uNameresult === 1 && dNameresult === 1) {
+            if(binaryProfile === null){
+                console.log("please upload profile picture");
+            } else {
+                const { status } = await canister.createNewUser(principal, username, displayName, binaryProfile, bio);
+                if(status === 0n){
+                    console.log("success");
+                    setUserExists(true);
+                };
+            };
+        };
     };
 
     return (
@@ -91,8 +164,8 @@ export default function UserDetails({ setUserExists, setLoading }) {
                         }}>*{displaynameError}</p>
                     </div>
                     <div id="bio-div">
-                        <textarea name="bio" value={bio} onChange={(e) => setBio(e.target.value)} id="bio" cols="30" rows="10" placeholder="Enter Bio" />
-                        <p className="error-msg bio-error">{bioCount}/60</p>
+                        <textarea maxLength="150" name="bio" value={bio} onChange={(e) => setBio(e.target.value)} id="bio" cols="30" rows="10" placeholder="Enter Bio" />
+                        <p className="error-msg bio-error" id={bioCount < 150 ? "bio-color" : ""}>{bioCount}/150</p>
                     </div>
                     <div id="submit" onClick={() => createNewUser()}>Submit</div>
                 </div>

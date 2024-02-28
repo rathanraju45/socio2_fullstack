@@ -7,6 +7,7 @@ import ClipLoader from '../../../node_modules/react-spinners/ClipLoader';
 import { useConnect, useCanister } from "@connect2ic/react";
 import UserDetails from './components/user_details/UserDetails';
 import CanisterContext from './components/CanisterContext';
+import { canisterId } from '../../declarations/socio_backend/index';
 
 export default function App() {
   const [loading, setLoading] = useState(false);
@@ -19,27 +20,26 @@ export default function App() {
       console.log("disconnected");
     }
   });
-  const [canister] = useCanister("socio");
+  const [canister] = useCanister("socio",{mode: "anonymous"});
 
   useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const { status } = await canister.checkUser(principal);
-        setUserExists(status !== 0n);
-      } catch (error) {
-        console.error("Error checking user:", error);
-      } finally {
-        setLoading(false); // Set loading to false after fetching user data
+    async function checkForUser(){
+      setLoading(true);
+      const {status} = await canister.checkUser(principal);
+      if(status === 0n){
+        setUserExists(false);
+      } else {
+        setUserExists(true);
       }
-    };
-
-    if (principal !== undefined) {
-      checkUser();
+      setLoading(false);
     }
-  }, [principal]);
+    if(isConnected){
+      checkForUser();
+    }
+  }, [isConnected]);
 
   return (
-    <CanisterContext.Provider value={{ canister }}>
+    <CanisterContext.Provider value={{ canister,principal }}>
       <div id="app">
         {loading ? (
           <ClipLoader /> // Always show the loader while fetching data

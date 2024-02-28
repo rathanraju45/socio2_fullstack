@@ -130,6 +130,10 @@
     color: red;
 }
 
+#bio-color{
+    color: #ff9c00 !important;
+}
+
 #submit{
     width: 30%;
     height: 8%;

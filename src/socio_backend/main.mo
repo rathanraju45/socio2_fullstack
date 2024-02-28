@@ -17,6 +17,12 @@ actor socio {
     var users = RBTree.RBTree<Principal, User>(Principal.compare); // storage for users.
     var userNames = RBTree.RBTree<Text, Principal>(Text.compare); // storage for usernames.
 
+    // function to return the princiapl
+
+    public func whoami(identity : Text) : async Text{
+        return(identity);
+    };
+
     //function to check if user already exists.
 
     public query func checkUser(userprincipal : Text) : async {
@@ -43,12 +49,13 @@ actor socio {
 
     //function to create a new User.
 
-    public shared (msg) func createNewUser(username : Text, displayname : Text, profilepic : Blob, userbio : Text) : async {
+    public func createNewUser(identity : Text, username : Text, displayname : Text, profilepic : Blob, userbio : Text) : async {
         status : Nat;
         msg : Text;
     } {
-        if (not Principal.isAnonymous(msg.caller)) {
-            var userExist = users.get(msg.caller);
+        var principal = Principal.fromText(identity);
+        if (not Principal.isAnonymous(principal)) {
+            var userExist = users.get(principal);
             switch (userExist) {
                 case (null) {
                     var newUser : User = {
@@ -57,8 +64,8 @@ actor socio {
                         profilePic = profilepic;
                         bio = userbio;
                     };
-                    users.put(msg.caller, newUser);
-                    userNames.put(username,msg.caller);
+                    users.put(principal, newUser);
+                    userNames.put(username,principal);
                     return {
                         status = 0;
                         msg = "User created succesfully";
