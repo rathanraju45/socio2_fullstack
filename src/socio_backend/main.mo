@@ -5,6 +5,7 @@ import Blob "mo:base/Blob";
 import Nat "mo:base/Nat";
 import Prelude "mo:base/Prelude";
 import Int "mo:base/Int";
+import RbTree "mo:base/RBTree";
 
 actor socio {
 
@@ -23,7 +24,7 @@ actor socio {
 
     // function to return the princiapl
 
-    public func whoami(identity : Text) : async Text{
+    public query func whoami(identity : Text) : async Text{
         return(identity);
     };
 
@@ -116,7 +117,9 @@ actor socio {
         };
     };
 
-    public func getProfile(identity : Text) : async ?User{
+    //function to get the profile details
+
+    public query func getProfile(identity : Text) : async ?User{
         switch(users.get(Principal.fromText(identity))){
             case (null){
                 return null;
@@ -125,6 +128,14 @@ actor socio {
                 return user;
             };
         };
+    };
+
+    //function to wipe all the data
+
+    public func wipeData() : async Text{
+        users := RBTree.RBTree<Principal, User>(Principal.compare);
+        userNames := RBTree.RBTree<Text, Principal>(Text.compare);
+        return "Wiped all data...";
     };
 
 };
