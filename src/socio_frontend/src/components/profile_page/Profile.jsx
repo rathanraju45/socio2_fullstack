@@ -39,40 +39,31 @@ export default function Profile({ darkMode }) {
     setRawProfilePic(imageUrl);
   }
 
-  function replacer(key, value) {
-    if (typeof value === 'bigint') {
-      return value.toString();
-    } else {
-      return value;
-    }
-  }
-
   useEffect(() => {
     async function fetchProfile() {
       let fetchedProfile = await canister.getProfile(principal);
-      fetchedProfile = JSON.stringify(fetchedProfile, replacer, 2);
       if (fetchedProfile !== null) {
-        const { userName, displayName, profilePic, posts, following, followers, bio } = fetchedProfile;
         setProfileData({
-          username: userName,
-          displayname: displayName,
-          profilepic: profilePic,
-          posts: posts,
-          following: following,
-          followers: followers,
-          bio: bio
+          username: fetchedProfile[0].userName,
+          displayname: fetchedProfile[0].displayName,
+          profilepic: fetchedProfile[0].profilePic,
+          posts: (fetchedProfile[0].posts).toString(),
+          following: (fetchedProfile[0].following).toString(),
+          followers: (fetchedProfile[0].followers).toString(),
+          bio: fetchedProfile[0].bio
         });
+        handleImageDownload();
       };
     };
     if (principal !== null) {
       fetchProfile();
-      handleImageDownload();
     }
   }, [canister, principal]);
 
-
   useEffect(() => {
-    console.log(profileData);
+    if(profileData.profilePic!==null){
+      handleImageDownload();
+    }
   }, [profileData])
 
   return (
@@ -93,7 +84,7 @@ export default function Profile({ darkMode }) {
           </div>
 
           <div className="follow-section">
-            <div className="posts">{profileData.post} posts</div>
+            <div className="posts">{profileData.posts} posts</div>
             <div className="following">{profileData.following} following</div>
             <div className="followers">{profileData.followers} followers</div>
           </div>
