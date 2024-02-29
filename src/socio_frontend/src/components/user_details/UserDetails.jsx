@@ -65,13 +65,13 @@ export default function UserDetails({ setUserExists, setLoading }) {
         var validateUname = username;
         if (validateUname !== '') {
             if (validateUname.length < 5 || validateUname.length > 20) {
-                setUsernameError('*Character length must be betweeen 5 & 20');
+                setUsernameError('Character length must be betweeen 5 & 20');
                 return 0;
             } else if (!/^[a-zA-Z_]/.test(validateUname)) {
-                setUsernameError('*First Character must be alphabet');
+                setUsernameError('First Character must be alphabet');
                 return 0;
             } else if (!/^[a-zA-Z0-9_]*$/.test(validateUname)) {
-                setUsernameError('*only alphanumerics and _ is allowed');
+                setUsernameError('only alphanumerics and _ is allowed');
                 return 0;
             } else {
                 setUsernameError('Checking for Username availability');
@@ -85,7 +85,7 @@ export default function UserDetails({ setUserExists, setLoading }) {
                 };
             };
         } else {
-            setUsernameError('*Username is empty');
+            setUsernameError('Username is empty');
             return 0;
         };
     };
@@ -94,17 +94,17 @@ export default function UserDetails({ setUserExists, setLoading }) {
         var validateDname = displayName;
         if (validateDname !== '') {
             if (validateDname.length < 5 || validateDname.length > 20) {
-                setDisplaynameError('*Character length must be betweeen 5 & 20');
+                setDisplaynameError('Character length must be betweeen 5 & 20');
                 return 0;
             } else if (!/^[a-zA-Z_]/.test(validateDname)) {
-                setDisplaynameError('*First Character must be alphabet');
+                setDisplaynameError('First Character must be alphabet');
                 return 0;
             } else if (!/^[a-zA-Z0-9_]*$/.test(validateDname)) {
-                setDisplaynameError('*only alphanumerics and _ is allowed');
+                setDisplaynameError('only alphanumerics and _ is allowed');
                 return 0;
             }
         } else {
-            setDisplaynameError('*Display name is empty');
+            setDisplaynameError('Display name is empty');
             return 0;
         };
         return 1;
@@ -112,7 +112,8 @@ export default function UserDetails({ setUserExists, setLoading }) {
 
     function validateBio(){
         if(bio === ""){
-            setBio("Socio user");
+            console.log("Setting default bio...");
+            setBio('Socio user');
         };
     };
 
@@ -125,10 +126,8 @@ export default function UserDetails({ setUserExists, setLoading }) {
                 console.log("please upload profile picture");
             } else {
                 if(bio === ""){
-                    console.log(bio);
-                    setBio("Socio user");
-                    console.log(bio);
-                }
+                    validateBio();
+                };
                 setLoading(true);
                 const { status } = await canister.createNewUser(principal, username, displayName, binaryProfile, bio);
                 if(status === 0n){

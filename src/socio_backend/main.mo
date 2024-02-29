@@ -4,6 +4,7 @@ import Text "mo:base/Text";
 import Blob "mo:base/Blob";
 import Nat "mo:base/Nat";
 import Prelude "mo:base/Prelude";
+import Int "mo:base/Int";
 
 actor socio {
 
@@ -11,6 +12,9 @@ actor socio {
         userName : Text;
         displayName : Text;
         profilePic : Blob;
+        posts: Int;
+        following: Int;
+        followers: Int;
         bio : Text;
     };
 
@@ -62,6 +66,9 @@ actor socio {
                         userName = username;
                         displayName = displayname;
                         profilePic = profilepic;
+                        posts = 0;
+                        following = 0;
+                        followers = 0;
                         bio = userbio;
                     };
                     users.put(principal, newUser);
