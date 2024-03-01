@@ -134,7 +134,7 @@
     color: #ff9c00 !important;
 }
 
-#submit{
+.submit{
     width: 30%;
     height: 8%;
     border-radius: 10px;
@@ -200,7 +200,7 @@
         font-size: 5vw !important;
     }
 
-    #submit{
+    .submit{
         height: 10%;
         font-size: 3vw;
     }
@@ -267,7 +267,7 @@
         font-size: 3.5vw;
     }
 
-    #submit{
+    .submit{
         height: 10%;
         font-size: 3vw;
     }
