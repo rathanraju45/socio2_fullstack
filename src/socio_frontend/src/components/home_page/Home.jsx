@@ -18,7 +18,7 @@ import Profile from '../profile_page/Profile';
 import ChatPage from '../chat_page/ChatPage';
 import './Home.css';
 
-export default function Home() {
+export default function Home({setConnected}) {
 
     const isMobile = window.innerWidth <= 885 ? true : false;
 
@@ -153,7 +153,7 @@ export default function Home() {
                     <div className="icon">
                         <LuLogOut />
                     </div>
-                    <p className={navigationSize === 'max' ? "showP" : "hideP"}>Logout</p>
+                    <p className={navigationSize === 'max' ? "showP" : "hideP"} onClick={() => setConnected(false) }>Logout</p>
                 </div>
 
                 <div className="nav-item more-icon" style={{

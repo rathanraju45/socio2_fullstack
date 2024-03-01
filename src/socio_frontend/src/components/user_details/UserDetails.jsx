@@ -5,7 +5,7 @@ import Resizer from 'react-image-file-resizer';
 import './UserDetails.css';
 import CanisterContext from '../CanisterContext';
 
-export default function UserDetails({ setUserExists, setLoading }) {
+export default function UserDetails({ setUserExists, setLoading, setLoadingMessage }) {
 
     const { canister, principal } = useContext(CanisterContext);
 
@@ -129,11 +129,13 @@ export default function UserDetails({ setUserExists, setLoading }) {
                     validateBio();
                 };
                 setLoading(true);
+                setLoadingMessage("Creating the user...");
                 const { status } = await canister.createNewUser(principal, username, displayName, binaryProfile, bio);
                 if(status === 0n){
                     setUserExists(true);
                 };
                 setLoading(false);
+                setLoadingMessage(null);
             };
         };
     };
