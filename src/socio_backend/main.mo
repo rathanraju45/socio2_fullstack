@@ -130,18 +130,6 @@ actor socio {
         };
     };
 
-    //function to get the editable profile details
-
-    public query func getEditableProfile() : async {
-        data: ?{
-            username:Text;
-            display
-        }
-    } {
-        
-
-    };
-
     //function to wipe all the data
 
     public func wipeData() : async Text{

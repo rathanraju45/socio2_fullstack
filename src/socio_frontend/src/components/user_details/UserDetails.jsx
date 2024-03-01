@@ -4,9 +4,8 @@ import defautl_profile_pic from "../../../assets/images/default_profile.jpg";
 import Resizer from 'react-image-file-resizer';
 import './UserDetails.css';
 import CanisterContext from '../CanisterContext';
-import EditProfile from '../edit_profile/EditProfile';
 
-export default function UserDetails({ setUserExists, setLoading, setLoadingMessage, edit=false }) {
+export default function UserDetails({ setUserExists, setLoading, setLoadingMessage }) {
 
     const { canister, principal } = useContext(CanisterContext);
 
@@ -141,17 +140,6 @@ export default function UserDetails({ setUserExists, setLoading, setLoadingMessa
         };
     };
 
-    async function autoFillForEdit(){
-        return True;
-    };
-
-    async function editProfile(){
-        const autoFilled = autoFillForEdit();
-        if(autoFilled){
-
-        }
-    };
-
     return (
         <div id="user-details">
 
@@ -189,8 +177,7 @@ export default function UserDetails({ setUserExists, setLoading, setLoadingMessa
                         <textarea maxLength="150" name="bio" value={bio} onChange={(e) => setBio(e.target.value)} id="bio" cols="30" rows="10" placeholder="Enter Bio" />
                         <p className="error-msg bio-error" id={bioCount < 150 ? "bio-color" : ""}>{bioCount}/150</p>
                     </div>
-                    <div className="submit" onClick={() => createNewUser()}>Submit</div>
-                    <div className="submit" onClick={() => editProfile()}>Edit</div>
+                    <div id="submit" onClick={() => createNewUser()}>Submit</div>
                 </div>
 
             </div>
