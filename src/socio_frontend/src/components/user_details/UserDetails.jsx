@@ -4,11 +4,16 @@ import defautl_profile_pic from "../../../assets/images/default_profile.jpg";
 import Resizer from 'react-image-file-resizer';
 import './UserDetails.css';
 import CanisterContext from '../CanisterContext';
-import EditProfile from '../edit_profile/EditProfile';
+import useConvertToBinary from '../../hooks/useConvertToBinary';
+import useConvertToImage from '../../hooks/useConvertToImage';
 
 export default function UserDetails({ setLoading, setLoadingMessage, edit = false }) {
 
-    const { canister, principal, setUserExists, setProfileEdit } = useContext(CanisterContext);
+    //hooks
+    const { imageUrl, binary, convertToBinary } = useConvertToBinary();
+    const { image, convertToImage } = useConvertToImage();
+
+    const { canister, principal, setUserExists, profileEdit, setProfileEdit } = useContext(CanisterContext);
 
     const [usernameError, setUsernameError] = useState(null);
     const [displaynameError, setDisplaynameError] = useState(null);
@@ -20,31 +25,25 @@ export default function UserDetails({ setLoading, setLoadingMessage, edit = fals
     const [profilePicture, setProfilePicture] = useState(null);
 
     const [binaryProfile, setBinaryProfile] = useState(null);
+    
+    const [binaryProfilePic, setBinaryProfilePic] = useState(null); //for edit profile page
+
+    const [autoFilled, setAutoFilled] = useState(false);
 
     function handleImageUpload(event) {
         const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                // Convert the ArrayBuffer to a Blob
-                const photoBlob = new Blob([e.target.result], { type: file.type });
-
-                // Create a URL for the Blob
-                const imageUrl = URL.createObjectURL(photoBlob);
-
-                // Set the profile picture
-                setProfilePicture(imageUrl);
-
-                // Convert the ArrayBuffer to a Vec<Nat8>
-                const arrayBuffer = new Uint8Array(e.target.result);
-                const vecNat8 = Array.from(arrayBuffer);
-
-                // Set the binary profile
-                setBinaryProfile(vecNat8);
-            };
-            reader.readAsArrayBuffer(file);
-        }
+        convertToBinary(file);
     };
+
+    useEffect(() => {
+        if (imageUrl !== null) {
+            setProfilePicture(imageUrl);
+        };
+    }, [imageUrl]);
+
+    useEffect(() => {
+        setBinaryProfile(binary);
+    }, [binary]);
 
     useEffect(() => {
         if (usernameError !== null) {
@@ -124,7 +123,7 @@ export default function UserDetails({ setLoading, setLoadingMessage, edit = fals
 
         if (uNameresult === 1 && dNameresult === 1) {
             if (binaryProfile === null) {
-                console.log("please upload profile picture");
+                alert("please upload profile picture");
             } else {
                 if (bio === "") {
                     validateBio();
@@ -142,19 +141,62 @@ export default function UserDetails({ setLoading, setLoadingMessage, edit = fals
     };
 
     async function autoFillForEdit() {
-        const { data } = canister.getEditableProfile(principal);
-        console.log(data);
+        const { data } = await canister.getEditableProfile(principal);
+        setUsername(data[0].username);
+        setDisplayName(data[0].displayname);
+        setBinaryProfilePic(data[0].profilepic);
+        setBio(data[0].bio);
+        if (data) {
+            setAutoFilled(true);
+        };
     };
 
-    async function editProfile() {
-
+    function handleEditImageDownload() {
+        let vecNat8 = binaryProfilePic;
+        convertToImage(vecNat8);
     };
 
     useEffect(() => {
-        if (setProfileEdit) {
+        if (profileEdit) {
+            handleEditImageDownload();
+        };
+    }, [binaryProfilePic]);
+
+    useEffect(() => {
+        if (profileEdit && image !== null) {
+            setProfilePicture(image);
+        };
+    }, [image]);
+
+    async function editProfile() {
+        const uNameresult = await validateUserName();
+        const dNameresult = validateDisplayName();
+
+        if (uNameresult === 1 && dNameresult === 1) {
+            if (binaryProfile === null) {
+                alert("Please upload profile picture");
+            } else {
+                if (bio === "") {
+                    validateBio();
+                };
+                setLoading(true);
+                setLoadingMessage("Updating Profile...");
+                const { status } = await canister.editProfile(principal, username, displayName, binaryProfile, bio);
+                if (status === 0n) {
+                    setUserExists(true);
+                    setProfileEdit(false);
+                };
+                setLoading(false);
+                setLoadingMessage(null);
+            };
+        };
+    };
+
+    useEffect(() => {
+        if (profileEdit) {
             autoFillForEdit();
-        }
-    }, [setProfileEdit]);
+        };
+    }, [profileEdit]);
 
     return (
         <div id="user-details">

@@ -6,10 +6,13 @@ import { BiSolidVideos } from "react-icons/bi";
 import { FaRegBookmark } from "react-icons/fa6";
 import './Profile.css';
 import CanisterContext from '../CanisterContext';
-import EditProfile from '../edit_profile/EditProfile';
 import { Link } from '../../../../../node_modules/react-router-dom/dist/index';
+import useConvertToImage from '../../hooks/useConvertToImage';
 
 export default function Profile({ darkMode }) {
+
+  //hooks
+  const { image, convertToImage } = useConvertToImage();
 
   const { canister, principal, setUserExists , setProfileEdit } = useContext(CanisterContext);
 
@@ -27,19 +30,15 @@ export default function Profile({ darkMode }) {
   const [rawProfilePic, setRawProfilePic] = useState(null);
 
   function handleImageDownload() {
-
     let vecNat8 = profileData.profilepic;
-    // Convert the Vec<Nat8> back to an ArrayBuffer
-    const arrayBuffer = new Uint8Array(vecNat8).buffer;
+    convertToImage(vecNat8);
+  };
 
-    // Convert the ArrayBuffer to a Blob
-    const imageBlob = new Blob([arrayBuffer], { type: 'image/jpeg' });
-
-    // Create a URL for the Blob
-    const imageUrl = URL.createObjectURL(imageBlob);
-
-    setRawProfilePic(imageUrl);
-  }
+  useEffect(() => {
+    if (image !== null) {
+      setRawProfilePic(image);
+    };
+  }, [image]);
 
   useEffect(() => {
     async function fetchProfile() {

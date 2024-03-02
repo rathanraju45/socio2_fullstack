@@ -153,8 +153,38 @@ actor socio {
                         displayname = user.displayName;
                         profilepic = user.profilePic;
                         bio = user.bio;
-                    }
-                }
+                    };
+                };
+            };
+        };
+    };
+
+    public func editProfile(identity : Text, username : Text, displayname : Text, profilepic : Blob, editedBio : Text) : async {
+        status : Nat;
+        msg : Text;
+    } {
+        switch (users.get(Principal.fromText(identity))) {
+            case (null) {
+                return {
+                    status = 0;
+                    msg = "No user with the identity...";
+                };
+            };
+            case (?oldUser) {
+                var newUser : User = {
+                    userName = username;
+                    displayName = displayname;
+                    profilePic = profilepic;
+                    posts = oldUser.posts;
+                    following = oldUser.following;
+                    followers = oldUser.followers;
+                    bio = editedBio;
+                };
+                users.put(Principal.fromText(identity), newUser);
+                return {
+                    status = 0;
+                    msg = "Profile Edited Succesfully...";
+                };
             };
         };
     };

@@ -44,7 +44,7 @@ export default function App() {
   }, [isConnected]);
 
   return (
-    <CanisterContext.Provider value={{ canister, principal, setUserExists, setProfileEdit }}>
+    <CanisterContext.Provider value={{ canister, principal, setUserExists,profileEdit, setProfileEdit }}>
       <div id="app">
         {loading ? (
           <Loading loadingText={loadingMessage} /> // Always show the loader while fetching data
