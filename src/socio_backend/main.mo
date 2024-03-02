@@ -13,9 +13,9 @@ actor socio {
         userName : Text;
         displayName : Text;
         profilePic : Blob;
-        posts: Int;
-        following: Int;
-        followers: Int;
+        posts : Int;
+        following : Int;
+        followers : Int;
         bio : Text;
     };
 
@@ -24,8 +24,8 @@ actor socio {
 
     // function to return the princiapl
 
-    public query func whoami(identity : Text) : async Text{
-        return(identity);
+    public query func whoami(identity : Text) : async Text {
+        return (identity);
     };
 
     //function to check if user already exists.
@@ -33,18 +33,18 @@ actor socio {
     public query func checkUser(userprincipal : Text) : async {
         status : Nat;
         msg : Text;
-    }{
+    } {
         var principal = Principal.fromText(userprincipal);
         var userExists = users.get(principal);
-        switch(userExists){
-            case(null){
+        switch (userExists) {
+            case (null) {
                 return {
                     status = 0;
                     msg = "No user found";
                 };
             };
-            case(User){
-                return{
+            case (User) {
+                return {
                     status = 1;
                     msg = "User already exists";
                 };
@@ -73,7 +73,7 @@ actor socio {
                         bio = userbio;
                     };
                     users.put(principal, newUser);
-                    userNames.put(username,principal);
+                    userNames.put(username, principal);
                     return {
                         status = 0;
                         msg = "User created succesfully";
@@ -96,43 +96,102 @@ actor socio {
 
     //function to check if username is taken.
 
-    public query func checkUsername(username:Text) : async {
+    public query func checkUsername(username : Text) : async {
         status : Nat;
         msg : Text;
-    }{
+    } {
         var userNameExists = userNames.get(username);
-        switch(userNameExists){
-            case(null){
+        switch (userNameExists) {
+            case (null) {
                 return {
                     status = 0;
                     msg = "Username is available";
-                }
+                };
             };
-            case(Principal){
+            case (Principal) {
                 return {
                     status = 1;
                     msg = "Username already taken";
                 };
-            }
+            };
         };
     };
 
     //function to get the profile details
 
-    public query func getProfile(identity : Text) : async ?User{
-        switch(users.get(Principal.fromText(identity))){
-            case (null){
+    public query func getProfile(identity : Text) : async ?User {
+        switch (users.get(Principal.fromText(identity))) {
+            case (null) {
                 return null;
             };
-            case(user){
+            case (user) {
                 return user;
+            };
+        };
+    };
+
+    //function to get the editable profile details
+
+    public query func getEditableProfile(identity : Text) : async {
+        data : ?{
+            username : Text;
+            displayname : Text;
+            profilepic : Blob;
+            bio : Text;
+        };
+    } {
+        switch (users.get(Principal.fromText(identity))) {
+            case (null) {
+                return {
+                    data = null;
+                };
+            };
+            case (?user) {
+                return {
+                    data = ?{
+                        username = user.userName;
+                        displayname = user.displayName;
+                        profilepic = user.profilePic;
+                        bio = user.bio;
+                    };
+                };
+            };
+        };
+    };
+
+    public func editProfile(identity : Text, username : Text, displayname : Text, profilepic : Blob, editedBio : Text) : async {
+        status : Nat;
+        msg : Text;
+    } {
+        switch (users.get(Principal.fromText(identity))) {
+            case (null) {
+                return {
+                    status = 0;
+                    msg = "No user with the identity...";
+                };
+            };
+            case (?oldUser) {
+                var newUser : User = {
+                    userName = username;
+                    displayName = displayname;
+                    profilePic = profilepic;
+                    posts = oldUser.posts;
+                    following = oldUser.following;
+                    followers = oldUser.followers;
+                    bio = editedBio;
+                };
+                users.put(Principal.fromText(identity), newUser);
+                return {
+                    status = 0;
+                    msg = "Profile Edited Succesfully...";
+                };
             };
         };
     };
 
     //function to wipe all the data
 
-    public func wipeData() : async Text{
+    public func wipeData() : async Text {
         users := RBTree.RBTree<Principal, User>(Principal.compare);
         userNames := RBTree.RBTree<Text, Principal>(Text.compare);
         return "Wiped all data...";

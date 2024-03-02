@@ -115,6 +115,11 @@
     background-color: black;
     border: solid 1px white;
     font-size: 1.2vw;
+    padding: 0 2%;
+}
+
+#inputs-section textarea{
+    padding-top: 2%;
 }
 
 #inputs-section input:focus,#inputs-section textarea:focus{
@@ -134,7 +139,7 @@
     color: #ff9c00 !important;
 }
 
-#submit{
+.submit{
     width: 30%;
     height: 8%;
     border-radius: 10px;
@@ -143,6 +148,8 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 1%;
+    font-size: 1.2vw;
+    cursor: pointer;
 }
 
 @media screen and (max-width:600px) {
@@ -200,7 +207,7 @@
         font-size: 5vw !important;
     }
 
-    #submit{
+    .submit{
         height: 10%;
         font-size: 3vw;
     }
@@ -267,7 +274,7 @@
         font-size: 3.5vw;
     }
 
-    #submit{
+    .submit{
         height: 10%;
         font-size: 3vw;
     }
