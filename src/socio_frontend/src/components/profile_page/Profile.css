@@ -258,10 +258,6 @@
     height: 30vw !important;
   }
 
-  #profile-bottom {
-    border: solid 1px red !important;
-  }
-
   .profile-pic-container {
     width: 20vw;
     height: 20vw;
@@ -319,4 +315,5 @@
   .content-container {
     width: calc(100% - 5px);
   }
+
 }
