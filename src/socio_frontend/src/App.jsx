@@ -13,6 +13,7 @@ export default function App() {
   const [userExists, setUserExists] = useState(null);
   const [loadingMessage, setLoadingMessage] = useState(null);
   const [connected, setConnected] = useState(false);
+  const [profileEdit, setProfileEdit] = useState(false);
   const { isConnected, principal } = useConnect({
     onConnect: () => {
       console.log("connected");
@@ -21,15 +22,15 @@ export default function App() {
       console.log("disconnected");
     }
   });
-  const [canister] = useCanister("socio",{mode: "anonymous"});
+  const [canister] = useCanister("socio", { mode: "anonymous" });
 
   useEffect(() => {
     setConnected(isConnected);
-    async function checkForUser(){
+    async function checkForUser() {
       setLoading(true);
       setLoadingMessage("Checking if user already exists...");
-      const {status} = await canister.checkUser(principal);
-      if(status === 0n){
+      const { status } = await canister.checkUser(principal);
+      if (status === 0n) {
         setUserExists(false);
       } else {
         setUserExists(true);
@@ -37,23 +38,27 @@ export default function App() {
       setLoading(false);
       setLoadingMessage(null);
     }
-    if(isConnected){
+    if (isConnected) {
       checkForUser();
     }
   }, [isConnected]);
 
   return (
-    <CanisterContext.Provider value={{ canister,principal }}>
+    <CanisterContext.Provider value={{ canister, principal, setUserExists, setProfileEdit }}>
       <div id="app">
         {loading ? (
-          <Loading loadingText={loadingMessage}/> // Always show the loader while fetching data
+          <Loading loadingText={loadingMessage} /> // Always show the loader while fetching data
         ) : connected ? (
           userExists ? (
             <Router>
               <Home setConnected={setConnected} />
             </Router>
           ) : (
-            <UserDetails setUserExists={setUserExists} setLoading={setLoading} setLoadingMessage={setLoadingMessage} />
+            profileEdit ? (
+              <UserDetails setLoading={setLoading} setLoadingMessage={setLoadingMessage} edit={true} />
+            ) : (
+              <UserDetails setLoading={setLoading} setLoadingMessage={setLoadingMessage} />
+            )
           )
         ) : (
           <Connect />

@@ -6,10 +6,12 @@ import { BiSolidVideos } from "react-icons/bi";
 import { FaRegBookmark } from "react-icons/fa6";
 import './Profile.css';
 import CanisterContext from '../CanisterContext';
+import EditProfile from '../edit_profile/EditProfile';
+import { Link } from '../../../../../node_modules/react-router-dom/dist/index';
 
 export default function Profile({ darkMode }) {
 
-  const { canister, principal } = useContext(CanisterContext);
+  const { canister, principal, setUserExists , setProfileEdit } = useContext(CanisterContext);
 
   const [acitveHead, setActiveHead] = useState('posts');
   const [profileData, setProfileData] = useState({
@@ -61,10 +63,10 @@ export default function Profile({ darkMode }) {
   }, [canister, principal]);
 
   useEffect(() => {
-    if(profileData.profilePic!==null){
+    if (profileData.profilePic !== null) {
       handleImageDownload();
     }
-  }, [profileData])
+  }, [profileData]);
 
   return (
     <div id='profile-container'>
@@ -78,8 +80,8 @@ export default function Profile({ darkMode }) {
             <div className="profile-username">
               <p>{profileData.username}</p>
             </div>
-            <div className="edit-profile-button">
-              Edit profile
+            <div className="edit-profile-button" onClick={() => { setUserExists(false); setProfileEdit(true) }}>
+              Edit Profile
             </div>
           </div>
 

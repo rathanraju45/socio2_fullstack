@@ -6,9 +6,9 @@ import './UserDetails.css';
 import CanisterContext from '../CanisterContext';
 import EditProfile from '../edit_profile/EditProfile';
 
-export default function UserDetails({ setUserExists, setLoading, setLoadingMessage, edit=false }) {
+export default function UserDetails({ setLoading, setLoadingMessage, edit = false }) {
 
-    const { canister, principal } = useContext(CanisterContext);
+    const { canister, principal, setUserExists, setProfileEdit } = useContext(CanisterContext);
 
     const [usernameError, setUsernameError] = useState(null);
     const [displaynameError, setDisplaynameError] = useState(null);
@@ -111,8 +111,8 @@ export default function UserDetails({ setUserExists, setLoading, setLoadingMessa
         return 1;
     };
 
-    function validateBio(){
-        if(bio === ""){
+    function validateBio() {
+        if (bio === "") {
             console.log("Setting default bio...");
             setBio('Socio user');
         };
@@ -123,16 +123,16 @@ export default function UserDetails({ setUserExists, setLoading, setLoadingMessa
         const dNameresult = validateDisplayName();
 
         if (uNameresult === 1 && dNameresult === 1) {
-            if(binaryProfile === null){
+            if (binaryProfile === null) {
                 console.log("please upload profile picture");
             } else {
-                if(bio === ""){
+                if (bio === "") {
                     validateBio();
                 };
                 setLoading(true);
                 setLoadingMessage("Creating the user...");
                 const { status } = await canister.createNewUser(principal, username, displayName, binaryProfile, bio);
-                if(status === 0n){
+                if (status === 0n) {
                     setUserExists(true);
                 };
                 setLoading(false);
@@ -141,16 +141,20 @@ export default function UserDetails({ setUserExists, setLoading, setLoadingMessa
         };
     };
 
-    async function autoFillForEdit(){
-        return True;
+    async function autoFillForEdit() {
+        const { data } = canister.getEditableProfile(principal);
+        console.log(data);
     };
 
-    async function editProfile(){
-        const autoFilled = autoFillForEdit();
-        if(autoFilled){
+    async function editProfile() {
 
+    };
+
+    useEffect(() => {
+        if (setProfileEdit) {
+            autoFillForEdit();
         }
-    };
+    }, [setProfileEdit]);
 
     return (
         <div id="user-details">
@@ -189,8 +193,16 @@ export default function UserDetails({ setUserExists, setLoading, setLoadingMessa
                         <textarea maxLength="150" name="bio" value={bio} onChange={(e) => setBio(e.target.value)} id="bio" cols="30" rows="10" placeholder="Enter Bio" />
                         <p className="error-msg bio-error" id={bioCount < 150 ? "bio-color" : ""}>{bioCount}/150</p>
                     </div>
-                    <div className="submit" onClick={() => createNewUser()}>Submit</div>
-                    <div className="submit" onClick={() => editProfile()}>Edit</div>
+                    <div className="submit" onClick={() => createNewUser()} style={{
+                        display: edit ? 'none' : 'flex'
+                    }}>Submit</div>
+                    <div className="submit" onClick={() => {
+                        if (autoFilled) {
+                            editProfile();
+                        }
+                    }} style={{
+                        display: edit ? 'flex' : 'none'
+                    }}>Edit</div>
                 </div>
 
             </div>

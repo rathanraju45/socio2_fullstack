@@ -1,9 +1,8 @@
-import React from 'react'
+import React from 'react';
+import UserDetails from '../user_details/UserDetails';
 
 export default function EditProfile() {
   return (
-    <div>
-      
-    </div>
+      <UserDetails edit={ true } />
   )
 }
