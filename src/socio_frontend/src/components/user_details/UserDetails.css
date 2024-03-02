@@ -115,6 +115,11 @@
     background-color: black;
     border: solid 1px white;
     font-size: 1.2vw;
+    padding: 0 2%;
+}
+
+#inputs-section textarea{
+    padding-top: 2%;
 }
 
 #inputs-section input:focus,#inputs-section textarea:focus{
@@ -143,6 +148,8 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 1%;
+    font-size: 1.2vw;
+    cursor: pointer;
 }
 
 @media screen and (max-width:600px) {
